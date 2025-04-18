@@ -5,6 +5,7 @@ function gameBoard() {
     const columns = 3;
     const board = [];
 
+    //Loop to create a 3x3 board
     for (let i = 0; i < rows; i++) {
         board[i] = [];
         for (let j = 0; j < columns; j++) {
@@ -25,10 +26,10 @@ function gameBoard() {
 
     };
     
-
     const printBoard = () => {
         const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()))
         console.log(boardWithCellValues);
+
     };
 
     return {
@@ -53,6 +54,56 @@ function Cell() {
     };
 }
 
+function showInterface(){
+
+  const boardContainer = document.getElementById('grid');
+
+  boardContainer.innerHTML = ''
+
+  const handleClick = (e) =>{
+    
+    const clickedCell = e.target;
+    const row = parseInt(clickedCell.getAttribute('data-row'));
+    const col = parseInt(clickedCell.getAttribute('data-col'));
+  
+    game.playRound(row, col);
+  
+    updateUI();
+  }
+
+  for(let row = 0; row < 3; row++){
+    const rows = document.createElement('div');
+    rows.classList.add('row');
+
+    for(let col = 0; col <3; col++){
+      const block = document.createElement('div');
+      block.classList.add('block');
+
+      block.setAttribute('data-row', row);
+      block.setAttribute('data-col', col);
+      
+      block.addEventListener('click', handleClick);
+
+      rows.appendChild(block);
+    }
+
+    boardContainer.appendChild(rows)
+  }
+
+
+  const updateUI = () =>{
+    const blocks = document.querySelectorAll('.block');
+
+    blocks.forEach((block) =>{
+      const row = parseInt(block.getAttribute('data-row'));
+      const col = parseInt(block.getAttribute('data-col'));
+      const value = game.getBoard()[row][col].getValue(); 
+
+      block.textContent = value || '';
+    })
+  }
+  
+}
 
 function GameController(
   playerOneName = "Player One",
@@ -75,13 +126,17 @@ function GameController(
 
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
-  };
+  }; 
+
   const getActivePlayer = () => activePlayer;
 
   const printNewRound = () => {
     board.printBoard();
     console.log(`${getActivePlayer().name}'s turn.`);
   };
+
+
+  //Validation for checking the winner
 
   const checkWinner = (playerSign) => {
     const boardState = board.getBoard();
@@ -103,18 +158,18 @@ function GameController(
       ) return true;
     }
 
-      // Check diagonals
-    if (
-    boardState[0][0].getValue() === playerSign &&
-    boardState[1][1].getValue() === playerSign &&
-    boardState[2][2].getValue() === playerSign
-    ) return true;
+    // Check diagonals
+      if (
+      boardState[0][0].getValue() === playerSign &&
+      boardState[1][1].getValue() === playerSign &&
+      boardState[2][2].getValue() === playerSign
+      ) return true;
 
-    if (
-    boardState[0][2].getValue() === playerSign &&
-    boardState[1][1].getValue() === playerSign &&
-    boardState[2][0].getValue() === playerSign
-    ) return true;
+      if (
+      boardState[0][2].getValue() === playerSign &&
+      boardState[1][1].getValue() === playerSign &&
+      boardState[2][0].getValue() === playerSign
+      ) return true;
 
     return false;
   }
@@ -151,7 +206,4 @@ function GameController(
 
 const game = GameController();
 
-
-
-
-
+showInterface();
