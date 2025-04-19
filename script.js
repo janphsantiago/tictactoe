@@ -1,5 +1,4 @@
 
-
 function gameBoard() {
     const rows = 3;
     const columns = 3;
@@ -56,6 +55,9 @@ function Cell() {
 
 function showInterface(){
 
+  const board = gameBoard();
+  const game = GameController();
+
   const boardContainer = document.getElementById('grid');
 
   boardContainer.innerHTML = ''
@@ -67,7 +69,6 @@ function showInterface(){
     const col = parseInt(clickedCell.getAttribute('data-col'));
   
     game.playRound(row, col);
-  
     updateUI();
   }
 
@@ -97,10 +98,14 @@ function showInterface(){
     blocks.forEach((block) =>{
       const row = parseInt(block.getAttribute('data-row'));
       const col = parseInt(block.getAttribute('data-col'));
-      const value = game.getBoard()[row][col].getValue(); 
+      const value = board.getBoard()[row][col].getValue(); 
 
       block.textContent = value || '';
     })
+  }
+
+  return{
+    handleClick, updateUI
   }
   
 }
@@ -136,7 +141,7 @@ function GameController(
   };
 
 
-  //Validation for checking the winner
+  // Validation for checking the winner
 
   const checkWinner = (playerSign) => {
     const boardState = board.getBoard();
@@ -150,11 +155,11 @@ function GameController(
       ) return true;
     }
 
-    for (let column = 0; column < 3; column++) {
+    for (let col = 0; col < 3; col++) {
       if (
-        boardState[column][0].getValue() === playerSign &&
-        boardState[column][1].getValue() === playerSign &&
-        boardState[column][2].getValue() === playerSign
+        boardState[0][col].getValue() === playerSign &&
+        boardState[1][col].getValue() === playerSign &&
+        boardState[2][col].getValue() === playerSign
       ) return true;
     }
 
