@@ -29,6 +29,7 @@ function gameBoard() {
     const printBoard = () => {
       const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()))
       console.log(boardWithCellValues);
+
     };
 
     const resetBoard = () =>{
@@ -37,7 +38,6 @@ function gameBoard() {
           board[i][j] = Cell();
         }
       }
-
     }
 
     return {
@@ -148,9 +148,8 @@ function gameController(
     console.log(`${getActivePlayer().name}'s turn.`);
   };
 
-
+  
   // Validation for checking the winner
-
   const checkWinner = (playerSign) => {
     const boardState = board.getBoard();
   
@@ -187,15 +186,32 @@ function gameController(
     return false;
   }
 
+  const checkForDraws = () =>{
+    const boardState = board.getBoard();
+
+    for (let i = 0; i < 3; i++){
+      for (let j = 0; j < 3; j++){
+        if(boardState[i][j].getValue() === null){
+          return;
+        }
+        
+      }
+    }
+    console.log('All cells are already taken')
+    board.resetBoard();
+  }
+  
   const playRound = (row, column) => {
   const moveSuccessful = board.makeMove(row, column, getActivePlayer().sign);
 
-  if (!moveSuccessful) {
+  if (!moveSuccessful) 
+  {
     console.log("Invalid move! Cell already taken.");
     return; // Don't switch turns or check for winner
   }
 
-  if (checkWinner(getActivePlayer().sign)) {
+  if (checkWinner(getActivePlayer().sign)) 
+  {
     console.log(`${getActivePlayer().name} wins!`);
     board.printBoard();
     board.resetBoard();
@@ -203,8 +219,17 @@ function gameController(
     return;
   }
 
+  if (checkForDraws()) 
+  {
+    console.log("It is a draw!!!");
+    board.printBoard();
+    board.resetBoard();
+    printNewRound();
+    return;
+  }
   switchPlayerTurn();
   printNewRound();
+  
 };
 
   // Initial play game message
@@ -212,7 +237,8 @@ function gameController(
 
   return {
     playRound,
-    getActivePlayer
+    getActivePlayer,
+    checkForDraws
   };
 }
 
