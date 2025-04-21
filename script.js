@@ -1,3 +1,4 @@
+const game = gameController();
 
 function gameBoard() {
     const rows = 3;
@@ -26,13 +27,21 @@ function gameBoard() {
     };
     
     const printBoard = () => {
-        const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()))
-        console.log(boardWithCellValues);
-
+      const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()))
+      console.log(boardWithCellValues);
     };
 
+    const resetBoard = () =>{
+      for(let i = 0; i < rows; i++){
+        for(let j = 0; j < columns; j++){
+          board[i][j] = Cell();
+        }
+      }
+
+    }
+
     return {
-        getBoard, makeMove, printBoard
+        getBoard, makeMove, printBoard, resetBoard
     };
 }
 
@@ -56,7 +65,6 @@ function Cell() {
 function showInterface(){
 
   const board = gameBoard();
-  const game = GameController();
 
   const boardContainer = document.getElementById('grid');
 
@@ -110,7 +118,7 @@ function showInterface(){
   
 }
 
-function GameController(
+function gameController(
   playerOneName = "Player One",
   playerTwoName = "Player Two"
 ) {
@@ -190,6 +198,8 @@ function GameController(
   if (checkWinner(getActivePlayer().sign)) {
     console.log(`${getActivePlayer().name} wins!`);
     board.printBoard();
+    board.resetBoard();
+    printNewRound();
     return;
   }
 
@@ -197,18 +207,13 @@ function GameController(
   printNewRound();
 };
 
-
   // Initial play game message
   printNewRound();
 
-  // For the console version, we will only use playRound, but we will need
-  // getActivePlayer for the UI version, so I'm revealing it now
   return {
     playRound,
     getActivePlayer
   };
 }
-
-const game = GameController();
 
 showInterface();
