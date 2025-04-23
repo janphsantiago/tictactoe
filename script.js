@@ -62,22 +62,37 @@ function Cell() {
     };
 }
 
-function showInterface(){
-
+function showInterface(row, col){
   const board = gameBoard();
 
   const boardContainer = document.getElementById('grid');
-
   boardContainer.innerHTML = ''
 
+  
   const handleClick = (e) =>{
     
     const clickedCell = e.target;
     const row = parseInt(clickedCell.getAttribute('data-row'));
     const col = parseInt(clickedCell.getAttribute('data-col'));
-  
-    game.playRound(row, col);
+    
+    const result = game.playRound(row, col);
     updateUI();
+
+    const resultsText = document.getElementById('resultsText');
+  
+    if (result === "invalid"){
+      resultsText.textContent = "Invalid move! Cell already taken.";
+    }
+  
+    else if (result === "win"){
+      resultsText.textContent = `The winner is ${game.getActivePlayer().name}`;
+    }
+    else if (result === "draw"){
+      resultsText.textContent = "It is a draw.";
+    }
+    else if (result === "continue"){
+      resultsText.textContent = `${game.getActivePlayer().name}'s turn`;
+    }
   }
 
   for(let row = 0; row < 3; row++){
@@ -100,9 +115,9 @@ function showInterface(){
   }
 
 
-  const updateUI = () =>{
+  const updateUI = (row, col) =>{
     const blocks = document.querySelectorAll('.block');
-
+    
     blocks.forEach((block) =>{
       const row = parseInt(block.getAttribute('data-row'));
       const col = parseInt(block.getAttribute('data-col'));
@@ -110,6 +125,7 @@ function showInterface(){
 
       block.textContent = value || '';
     })
+  
   }
 
   return{
@@ -194,10 +210,8 @@ function gameController(
         if(boardState[i][j].getValue() === null){
           return;
         }
-        
       }
     }
-    console.log('All cells are already taken')
     board.resetBoard();
   }
   
@@ -206,30 +220,28 @@ function gameController(
 
   if (!moveSuccessful) 
   {
-    console.log("Invalid move! Cell already taken.");
-    return; // Don't switch turns or check for winner
+
+    return "invalid"; // Don't switch turns or check for winner
   }
 
   if (checkWinner(getActivePlayer().sign)) 
   {
-    console.log(`${getActivePlayer().name} wins!`);
     board.printBoard();
     board.resetBoard();
     printNewRound();
-    return;
+    return "win";
   }
 
   if (checkForDraws()) 
   {
-    console.log("It is a draw!!!");
     board.printBoard();
     board.resetBoard();
-    printNewRound();
-    return;
+    return "draw";
   }
+
   switchPlayerTurn();
   printNewRound();
-  
+  return "continue";
 };
 
   // Initial play game message
