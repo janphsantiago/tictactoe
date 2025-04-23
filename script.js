@@ -85,6 +85,7 @@ function showInterface(row, col){
   
     else if (result === "win"){
       resultsText.textContent = `The winner is ${game.getActivePlayer().name}`;
+      
     }
     else if (result === "draw"){
       resultsText.textContent = "It is a draw.";
@@ -213,7 +214,8 @@ function gameController(
         }
       }
     }
-    board.resetBoard();
+  alert("It is a DRAW!");
+  board.resetBoard();
   }
   
   const playRound = (row, column) => {
@@ -221,27 +223,36 @@ function gameController(
 
   if (!moveSuccessful) 
   {
-
+    alert("The cell is already taken!!")
     return "invalid"; // Don't switch turns or check for winner
   }
 
   if (checkWinner(getActivePlayer().sign)) 
   {
+    alert(`The winner is: ${getActivePlayer().name}`)
     board.printBoard();
     board.resetBoard();
     printNewRound();
+  
     return "win";
   }
 
   if (checkForDraws()) 
   {
+    
     board.printBoard();
     board.resetBoard();
+    printNewRound();
+    
     return "draw";
   }
 
   switchPlayerTurn();
-  printNewRound();
+
+  setTimeout(() => {
+    printNewRound();
+  }, 1000);
+  
   return "continue";
 };
 
