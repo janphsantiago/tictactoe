@@ -63,7 +63,6 @@ function Cell() {
 }
 
 function showInterface(row, col){
-  const board = gameBoard();
 
   const boardContainer = document.getElementById('grid');
   boardContainer.innerHTML = ''
@@ -79,7 +78,7 @@ function showInterface(row, col){
     updateUI();
 
     const resultsText = document.getElementById('resultsText');
-  
+    
     if (result === "invalid"){
       resultsText.textContent = "Invalid move! Cell already taken.";
     }
@@ -115,17 +114,18 @@ function showInterface(row, col){
   }
 
 
-  const updateUI = (row, col) =>{
+  const updateUI = () =>{
     const blocks = document.querySelectorAll('.block');
-    
+    const boardState = game.getBoard();
+
     blocks.forEach((block) =>{
       const row = parseInt(block.getAttribute('data-row'));
       const col = parseInt(block.getAttribute('data-col'));
-      const value = board.getBoard()[row][col].getValue(); 
+      const value = boardState[row][col].getValue(); 
 
       block.textContent = value || '';
     })
-  
+    
   }
 
   return{
@@ -138,6 +138,7 @@ function gameController(
   playerOneName = "Player One",
   playerTwoName = "Player Two"
 ) {
+
   const board = gameBoard();
 
   const players = [
@@ -250,7 +251,8 @@ function gameController(
   return {
     playRound,
     getActivePlayer,
-    checkForDraws
+    checkForDraws,
+    getBoard: board.getBoard,
   };
 }
 
