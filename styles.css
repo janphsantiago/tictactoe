@@ -1,3 +1,10 @@
+body{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
 #grid {
     display: flex;
     flex-direction: column;
@@ -12,14 +19,15 @@
   }
   
   .block {
-    width: 60px;
-    height: 60px;
+    width: 150px;
+    height: 100px;
     background-color: #eee;
     border: 2px solid #333;
-    font-size: 2rem;
+    font-size: 4rem;
     text-align: center;
-    line-height: 60px;
+    line-height: 90px;
     cursor: pointer;
     user-select: none;
+    color: #dd1212ab
   }
   
