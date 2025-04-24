@@ -166,7 +166,16 @@ function gameController(
     console.log(`${getActivePlayer().name}'s turn.`);
   };
 
+  const resetGame = () => {
+    const resetBtn = document.getElementById('reset');
+
+    resetBtn.addEventListener('click', () =>{
+      board.resetBoard();
+      showInterface();
+    })
+  }
   
+
   // Validation for checking the winner
   const checkWinner = (playerSign) => {
     const boardState = board.getBoard();
@@ -233,6 +242,7 @@ function gameController(
     board.printBoard();
     board.resetBoard();
     printNewRound();
+    
   
     return "win";
   }
@@ -263,8 +273,10 @@ function gameController(
     playRound,
     getActivePlayer,
     checkForDraws,
+    resetGame,
     getBoard: board.getBoard,
   };
 }
 
 showInterface();
+game.resetGame();
