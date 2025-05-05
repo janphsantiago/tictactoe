@@ -14,6 +14,7 @@ function gameBoard() {
     }
     const getBoard = () => board;
 
+    // UPDATES THE BOARD, CHECK IF THE CELL IS TAKEN
     const makeMove = (row, column, player) => {
       const cell = board[row][column];
     
@@ -32,6 +33,7 @@ function gameBoard() {
 
     };
 
+    // REPLACE EACH CELL WITH A BLANK CELL
     const resetBoard = () =>{
       for(let i = 0; i < rows; i++){
         for(let j = 0; j < columns; j++){
@@ -56,6 +58,7 @@ function Cell() {
     // How we will retrieve the current value of this cell through closure
     const getValue = () => value;
   
+    // USES CLOSURE TO KEEP VALUES PRIVATE
     return {
       addSign,
       getValue
@@ -67,7 +70,6 @@ function showInterface(row, col){
   const boardContainer = document.getElementById('grid');
   boardContainer.innerHTML = ''
 
-  
   const handleClick = (e) =>{
     
     const clickedCell = e.target;
@@ -95,6 +97,7 @@ function showInterface(row, col){
     }
   }
 
+  // DYNAMICALLY CREATES A 3x3 GRID
   for(let row = 0; row < 3; row++){
     const rows = document.createElement('div');
     rows.classList.add('row');
@@ -114,7 +117,7 @@ function showInterface(row, col){
     boardContainer.appendChild(rows)
   }
 
-
+  // UPDATES THE INTERFACE ACCORDING TO THE BOARDSTATE
   const updateUI = () =>{
     const blocks = document.querySelectorAll('.block');
     const boardState = game.getBoard();
